@@ -2,13 +2,12 @@ package com.samdev.githubsearch.data.repository
 
 import com.samdev.githubsearch.data.models.RepoSearchResponse
 import com.samdev.githubsearch.utils.Resource
-import org.junit.Assert.*
 
 /**
  * @author Sam
  * Created 27/11/2021 at 1:46 PM
  */
-class DummyRepository() : IRepository {
+class DummyRepository : IRepository {
 
     var networkError = false
 
