@@ -9,4 +9,9 @@
     <string name="watchers">Watchers</string>
     <string name="issues">Issues</string>
     <string name="forks">Forks</string>
+    <string name="search_by_repository_name">Search by repository name</string>
+    <string name="search_hint">What are you looking for?</string>
+    <string name="cd_touch_to_sort_repositories">touch to sort repositories</string>
+    <string name="cd_back_button">navigate backwards</string>
+    <string name="repository_details">Repository details</string>
 </resources>

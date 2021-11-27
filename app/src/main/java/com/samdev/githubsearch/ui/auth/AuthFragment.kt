@@ -1,14 +1,13 @@
 package com.samdev.githubsearch.ui.auth
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.samdev.githubsearch.R
+import com.samdev.githubsearch.ui.BaseFragment
 
-class AuthFragment : Fragment() {
+class AuthFragment : BaseFragment() {
 
     companion object {
         fun newInstance() = AuthFragment()
@@ -21,12 +20,6 @@ class AuthFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_auth, container, false)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(AuthViewModel::class.java)
-        // TODO: Use the ViewModel
     }
 
 }

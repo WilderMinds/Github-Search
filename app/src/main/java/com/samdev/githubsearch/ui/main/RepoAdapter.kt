@@ -7,8 +7,12 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.samdev.githubsearch.data.models.Repo
 import com.samdev.githubsearch.databinding.ItemRepositoryBinding
+import com.samdev.githubsearch.utils.RepoClickCallback
+import com.samdev.githubsearch.utils.UiUtils
 
-class RepoAdapter : ListAdapter<Repo, RepoAdapter.ItemViewHolder>(RepoDiffCallback()) {
+class RepoAdapter(
+    private val callback: RepoClickCallback
+) : ListAdapter<Repo, RepoAdapter.ItemViewHolder>(RepoDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -36,14 +40,21 @@ class RepoAdapter : ListAdapter<Repo, RepoAdapter.ItemViewHolder>(RepoDiffCallba
             binding.tvForks.text = "${item.forksCount ?: 0}"
             binding.tvIssues.text = "${item.openIssuesCount ?: 0}"
 
-            setOnClickListener {
-                onClick(item)
+            // assign random color
+            val randomColor = UiUtils.generateRandomColor()
+            binding.clUserDetails.setBackgroundColor(randomColor)
+
+            // on user image clicked
+            binding.clUserDetails.setOnClickListener {
+                callback.onUserImageClicked(item)
+            }
+
+            // on list item clicked
+            binding.clRepoDetails.setOnClickListener {
+                callback.onListItemClicked(item)
             }
         }
 
-        private fun onClick(item: Repo) {
-
-        }
     }
 }
 

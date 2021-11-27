@@ -19,7 +19,7 @@
             android:layout_height="match_parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/ll_user_container"
+                android:id="@+id/cl_user_details"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:background="@color/blue"
@@ -61,12 +61,13 @@
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_repo_details"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:paddingHorizontal="@dimen/item_card_horizontal_padding"
                 android:paddingVertical="@dimen/item_card_vertical_padding"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/ll_user_container">
+                app:layout_constraintStart_toEndOf="@id/cl_user_details">
 
                 <TextView
                     android:id="@+id/tv_repo_name"

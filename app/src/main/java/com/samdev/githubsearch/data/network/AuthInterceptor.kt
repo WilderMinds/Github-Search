@@ -1,6 +1,5 @@
 package com.samdev.githubsearch.data.network
 
-import com.samdev.githubsearch.AppConstants
 import com.samdev.githubsearch.data.preference.PrefManager
 import okhttp3.Interceptor
 import okhttp3.Response
@@ -25,8 +24,8 @@ class AuthInterceptor @Inject constructor(
 
         val newRequest = originalRequest
             .newBuilder()
-            .addHeader("Authorization", "Bearer $authToken")
-            .addHeader("Accept", "application/json")
+            //.addHeader("Authorization", "Bearer $authToken")
+            // .addHeader("Accept", "application/json")
             .build()
 
         return chain.proceed(newRequest)
