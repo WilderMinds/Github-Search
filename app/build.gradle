@@ -50,6 +50,10 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
+    viewBinding {
+        enabled = true
+    }
 }
 
 dependencies {
@@ -93,6 +97,9 @@ dependencies {
 
     // image loading
     implementation 'io.coil-kt:coil:1.4.0'
+
+    // rounded imageView
+    implementation 'com.makeramen:roundedimageview:2.3.0'
 
     // unit testing
     def arch_version = '2.1.0'
