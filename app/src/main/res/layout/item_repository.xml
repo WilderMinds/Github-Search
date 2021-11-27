@@ -51,7 +51,7 @@
                     android:padding="5dp"
                     android:text="@string/s_username"
                     android:textColor="@color/white"
-                    android:textSize="12sp"
+                    android:textSize="11sp"
                     app:fontFamily="@font/mark_pro_bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

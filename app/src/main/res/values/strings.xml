@@ -14,4 +14,8 @@
     <string name="cd_touch_to_sort_repositories">touch to sort repositories</string>
     <string name="cd_back_button">navigate backwards</string>
     <string name="repository_details">Repository details</string>
+    <string name="no_items_to_sort">Sorry, there are no items to sort by.</string>
+    <string name="stars">Stars</string>
+    <string name="updated">Updated</string>
+    <string name="sort_by">Sort by</string>
 </resources>

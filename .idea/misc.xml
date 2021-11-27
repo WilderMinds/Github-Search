@@ -7,6 +7,7 @@
         <entry key="app/src/main/res/drawable/background_edittext_search.xml" value="0.21481481481481482" />
         <entry key="app/src/main/res/drawable/background_splash.xml" value="0.14427083333333332" />
         <entry key="app/src/main/res/drawable/ic_close.xml" value="0.21481481481481482" />
+        <entry key="app/src/main/res/drawable/ic_star.xml" value="0.14427083333333332" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1802536231884058" />
         <entry key="app/src/main/res/layout/fragment_main.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_repo_details.xml" value="0.165" />

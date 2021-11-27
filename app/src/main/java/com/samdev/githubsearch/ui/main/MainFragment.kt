@@ -4,12 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.samdev.githubsearch.R
 import com.samdev.githubsearch.data.models.Repo
 import com.samdev.githubsearch.databinding.FragmentMainBinding
+import com.samdev.githubsearch.extensions.toggleAnimateHideShow
 import com.samdev.githubsearch.ui.BaseFragment
 import com.samdev.githubsearch.utils.ErrorUtils
 import com.samdev.githubsearch.utils.RepoClickCallback
@@ -47,6 +50,49 @@ class MainFragment : BaseFragment() {
         listenSearchTextChanges()
         observeSearchResults()
         initRecyclerView()
+        initSortUI()
+    }
+
+
+    /**
+     * Do nothing if there is not data available to sort by
+     * Else show sorting view
+     */
+    private fun initSortUI() {
+        binding.btnSort.setOnClickListener {
+            toggleSortUI()
+
+        }
+
+        // setup and listen for selected items
+        binding.chipGroupSort.setOnCheckedChangeListener { _, checkedId ->
+            Timber.e("checked id -> $checkedId")
+            when (checkedId) {
+                R.id.chip_stars -> {
+                    Timber.e("filter by stars")
+                }
+                R.id.chip_forks -> {
+                    Timber.e("filter by forks")
+                }
+                R.id.chip_updated -> {
+                    Timber.e("filter by updated")
+                }
+                else -> {
+                    // nothing selected
+                    Timber.e("nothing selected")
+                }
+            }
+        }
+    }
+
+
+    private fun toggleSortUI() {
+        if (repoAdapter.itemCount == 0) {
+            Toast.makeText(context, getString(R.string.no_items_to_sort), Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        binding.cvSortLayout.toggleAnimateHideShow()
     }
 
 
