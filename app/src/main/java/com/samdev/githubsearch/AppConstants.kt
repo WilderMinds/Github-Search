@@ -13,4 +13,5 @@ object AppConstants {
 
     // NETWORK
     const val NETWORK_TIMEOUT: Long = 60
+    const val BASE_URL = " https://api.github.com/"
 }

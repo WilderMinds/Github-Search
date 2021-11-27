@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">GithubSearch</string>
+
+    <!-- error messages -->
+    <string name="generic_error_message">Sorry, something went wrong. Please try again later.</string>
+    <string name="no_internet_message">Sorry, no internet connection. Kindly check and try again.</string>
+    <string name="timeout_error">Sorry, request timed out, kindly reach out to support for assistance.</string>
 </resources>
