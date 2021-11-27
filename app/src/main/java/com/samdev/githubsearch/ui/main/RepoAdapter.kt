@@ -1,20 +1,19 @@
 package com.samdev.githubsearch.ui.main
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.samdev.githubsearch.R
 import com.samdev.githubsearch.data.models.Repo
+import com.samdev.githubsearch.databinding.ItemRepositoryBinding
 
 class RepoAdapter : ListAdapter<Repo, RepoAdapter.ItemViewHolder>(RepoDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_repository, parent, false)
-        return ItemViewHolder(view)
+        val inflater = LayoutInflater.from(parent.context)
+        val binding = ItemRepositoryBinding.inflate(inflater, parent, false)
+        return ItemViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
@@ -23,9 +22,19 @@ class RepoAdapter : ListAdapter<Repo, RepoAdapter.ItemViewHolder>(RepoDiffCallba
         }
     }
 
-    inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ItemViewHolder(
+        private val binding: ItemRepositoryBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
+
         fun bind(item: Repo) = with(itemView) {
+
             // Set data to your item view here
+            binding.tvAuthorName.text = item.owner?.login
+            binding.tvRepoName.text = item.fullName
+            binding.tvDescription.text = item.description
+            binding.tvWatchers.text = "${item.watchersCount ?: 0}"
+            binding.tvForks.text = "${item.forksCount ?: 0}"
+            binding.tvIssues.text = "${item.openIssuesCount ?: 0}"
 
             setOnClickListener {
                 onClick(item)
@@ -33,7 +42,7 @@ class RepoAdapter : ListAdapter<Repo, RepoAdapter.ItemViewHolder>(RepoDiffCallba
         }
 
         private fun onClick(item: Repo) {
-            // Handle item click actions
+
         }
     }
 }
