@@ -9,4 +9,7 @@ interface IPrefManager {
     fun isLoggedIn(): Boolean
     fun setLoggedIn(loggedIn: Boolean)
 
+    fun getAuthToken(): String
+    fun setAuthToken(token: String)
+
 }

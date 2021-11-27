@@ -32,5 +32,13 @@ class PrefManager @Inject constructor (
         helper.setPreference(AppConstants.PREF_IS_LOGGED_IN, loggedIn)
     }
 
+    override fun getAuthToken(): String {
+        return helper.getPreference(AppConstants.PREF_AUTH_TOKEN, "")
+    }
+
+    override fun setAuthToken(token: String) {
+        helper.setPreference(AppConstants.PREF_AUTH_TOKEN, token)
+    }
+
 
 }

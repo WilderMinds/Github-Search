@@ -9,6 +9,7 @@ import org.junit.Assert.*
 class DummyPrefManager(): IPrefManager {
 
     private var authenticated: Boolean = false
+    private var authToken: String = "sfonasonfuo243oienf"
 
     override fun isLoggedIn(): Boolean {
         return authenticated
@@ -16,6 +17,14 @@ class DummyPrefManager(): IPrefManager {
 
     override fun setLoggedIn(loggedIn: Boolean) {
         authenticated = loggedIn
+    }
+
+    override fun getAuthToken(): String {
+        return authToken
+    }
+
+    override fun setAuthToken(token: String) {
+        authToken = token
     }
 
 }
