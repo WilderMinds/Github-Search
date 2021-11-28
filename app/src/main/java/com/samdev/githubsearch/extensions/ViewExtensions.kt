@@ -46,6 +46,7 @@ fun ImageView.loadUrl(url: String?) {
     url?.let {
         load(url) {
             crossfade(false)
+            scaleType = ImageView.ScaleType.CENTER_CROP
             placeholder(R.drawable.avatar)
             error(R.drawable.avatar)
         }

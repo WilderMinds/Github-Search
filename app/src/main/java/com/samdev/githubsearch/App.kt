@@ -11,9 +11,10 @@ import timber.log.Timber
 @HiltAndroidApp
 class App : Application() {
 
-    lateinit var instance: App
-        private set
-
+    companion object {
+        lateinit var instance: App
+            private set
+    }
 
     override fun onCreate() {
         super.onCreate()
@@ -26,4 +27,8 @@ class App : Application() {
             Timber.plant(Timber.DebugTree())
         }
     }
+
+    val freeVariant: Boolean
+        get() = BuildConfig.FLAVOR == "free"
+
 }

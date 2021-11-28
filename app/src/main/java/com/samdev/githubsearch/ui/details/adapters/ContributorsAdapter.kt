@@ -9,8 +9,11 @@ import com.samdev.githubsearch.R
 import com.samdev.githubsearch.data.models.Owner
 import com.samdev.githubsearch.databinding.ItemContributorsBinding
 import com.samdev.githubsearch.extensions.loadUrl
+import com.samdev.githubsearch.utils.ItemClickedCallback
 
-class ContributorsAdapter :
+class ContributorsAdapter(
+    private val callback: ItemClickedCallback
+) :
     ListAdapter<Owner, ContributorsAdapter.ItemViewHolder>(OwnerDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
@@ -40,7 +43,7 @@ class ContributorsAdapter :
         }
 
         private fun onClick(item: Owner) {
-
+            callback.onItemClicked(item)
         }
     }
 }

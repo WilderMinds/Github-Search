@@ -28,4 +28,5 @@
     <string name="see_more_on_github">View on GitHub</string>
     <string name="enter_search_keyword">Enter search keyword</string>
     <string name="no_results_found">No results found for keyword</string>
+    <string name="limited_feature">Upgrade to pro version to use this feature</string>
 </resources>

@@ -6,11 +6,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.transition.TransitionInflater
 import com.google.gson.JsonObject
 import com.samdev.githubsearch.R
 import com.samdev.githubsearch.data.models.Owner
@@ -22,9 +24,11 @@ import com.samdev.githubsearch.ui.BaseFragment
 import com.samdev.githubsearch.ui.details.adapters.ContributorsAdapter
 import com.samdev.githubsearch.ui.details.adapters.LanguageAdapter
 import com.samdev.githubsearch.utils.ErrorUtils
+import com.samdev.githubsearch.utils.ItemClickedCallback
 import com.samdev.githubsearch.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import timber.log.Timber
 
 @AndroidEntryPoint
 class RepoDetailsFragment : BaseFragment() {
@@ -37,11 +41,23 @@ class RepoDetailsFragment : BaseFragment() {
     private val args: RepoDetailsFragmentArgs by navArgs()
     private lateinit var binding: FragmentRepoDetailsBinding
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        context?.let {
+            sharedElementEnterTransition =
+                TransitionInflater.from(it).inflateTransition(android.R.transition.move)
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentRepoDetailsBinding.inflate(inflater, container, false)
+        binding.root.doOnPreDraw {
+            Timber.e("on predraw")
+            startPostponedEnterTransition()
+        }
         return binding.root
     }
 
@@ -193,13 +209,19 @@ class RepoDetailsFragment : BaseFragment() {
     private fun displayExistingData() {
         args.repo?.let { repo ->
             binding.apply {
+
+                // setup image transition
+                ivAvatar.transitionName = "${repo.id}"
+
+                // display text
                 tvRepoName.text = repo.fullName
-                tvRepoDescription.text = repo.description
+                tvRepoDescription.text = repo.description ?: "N/A"
 
                 val imageUrl = repo.owner?.avatarUrl
                 ivAvatar.loadUrl(imageUrl)
             }
         }
+
     }
 
 
@@ -225,7 +247,16 @@ class RepoDetailsFragment : BaseFragment() {
 
     private fun displayContributors(contributors: List<Owner>) {
         context?.let { c ->
-            val contributorsAdapter = ContributorsAdapter()
+            val contributorsAdapter = ContributorsAdapter(object : ItemClickedCallback {
+                override fun onItemClicked(item: Any?) {
+                    if (item is Owner) {
+                        item.htmlUrl?.let {
+                            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(it))
+                            startActivity(browserIntent)
+                        }
+                    }
+                }
+            })
             val gridLayoutManager = GridLayoutManager(c, 4)
 
             binding.rvContributors.apply {
@@ -266,12 +297,6 @@ class RepoDetailsFragment : BaseFragment() {
         args.repo?.htmlUrl?.let {
             val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(it))
             startActivity(browserIntent)
-        }
-    }
-
-    private fun toggleProgress(show: Boolean) {
-        if (show) {
-            binding
         }
     }
 }

@@ -43,6 +43,8 @@ class RepoAdapter(
             binding.tvForks.text = "${item.forksCount ?: 0}"
             binding.tvIssues.text = "${item.openIssuesCount ?: 0}"
 
+            // using the id because we want a unique transition name
+            binding.ivAvatar.transitionName = "${item.id}"
             item.owner?.avatarUrl?.let { imageUrl ->
                 binding.ivAvatar.loadUrl(imageUrl)
             }
@@ -59,7 +61,7 @@ class RepoAdapter(
 
             // on list item clicked
             binding.clRepoDetails.setOnClickListener {
-                callback.onListItemClicked(item)
+                callback.onListItemClicked(item, binding.ivAvatar)
             }
         }
 

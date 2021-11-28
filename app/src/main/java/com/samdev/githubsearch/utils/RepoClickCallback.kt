@@ -1,5 +1,6 @@
 package com.samdev.githubsearch.utils
 
+import android.widget.ImageView
 import com.samdev.githubsearch.data.models.Repo
 
 /**
@@ -8,5 +9,5 @@ import com.samdev.githubsearch.data.models.Repo
  */
 interface RepoClickCallback {
     fun onUserImageClicked(repo: Repo)
-    fun onListItemClicked(repo: Repo)
+    fun onListItemClicked(repo: Repo, imageView: ImageView)
 }
