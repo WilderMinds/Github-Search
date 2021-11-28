@@ -1,5 +1,7 @@
 package com.samdev.githubsearch.ui.details
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -60,7 +62,9 @@ class RepoDetailsFragment : BaseFragment() {
                 findNavController().popBackStack()
             }
 
-
+            btnReadMoreAuthor.setOnClickListener {
+                viewUserInfoInExternalBrowser()
+            }
         }
     }
 
@@ -215,6 +219,12 @@ class RepoDetailsFragment : BaseFragment() {
 
             languageAdapter.submitList(languageList)
         }
+    }
 
+    private fun viewUserInfoInExternalBrowser() {
+        args.repo?.owner?.htmlUrl?.let {
+            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(it))
+            startActivity(browserIntent)
+        }
     }
 }
