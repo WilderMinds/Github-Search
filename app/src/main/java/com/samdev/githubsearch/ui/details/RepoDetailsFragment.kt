@@ -15,6 +15,7 @@ import com.google.gson.JsonObject
 import com.samdev.githubsearch.R
 import com.samdev.githubsearch.data.models.Owner
 import com.samdev.githubsearch.databinding.FragmentRepoDetailsBinding
+import com.samdev.githubsearch.extensions.hide
 import com.samdev.githubsearch.extensions.loadUrl
 import com.samdev.githubsearch.extensions.show
 import com.samdev.githubsearch.ui.BaseFragment
@@ -65,6 +66,10 @@ class RepoDetailsFragment : BaseFragment() {
             btnReadMoreAuthor.setOnClickListener {
                 viewUserInfoInExternalBrowser()
             }
+
+            btnViewOnGithub.setOnClickListener {
+                viewRepoInfoInExternalBrowser()
+            }
         }
     }
 
@@ -92,13 +97,13 @@ class RepoDetailsFragment : BaseFragment() {
             viewModel.userResponse.collectLatest { res ->
                 res?.let {
                     when (it) {
-                        is Resource.Loading -> {
-
-                        }
+                        is Resource.Loading -> toggleAuthLoader(true)
                         is Resource.Error -> {
+                            toggleAuthLoader(false)
                             handleError(it)
                         }
                         is Resource.Success -> {
+                            toggleAuthLoader(false)
                             displayUserData(it.data)
                         }
                     }
@@ -113,13 +118,13 @@ class RepoDetailsFragment : BaseFragment() {
             viewModel.contributors.collectLatest { res ->
                 res?.let {
                     when (it) {
-                        is Resource.Loading -> {
-
-                        }
+                        is Resource.Loading -> toggleContributorsLoader(true)
                         is Resource.Error -> {
+                            toggleContributorsLoader(false)
                             handleError(it)
                         }
                         is Resource.Success -> {
+                            toggleContributorsLoader(false)
                             displayContributors(it.data)
                         }
                     }
@@ -134,18 +139,45 @@ class RepoDetailsFragment : BaseFragment() {
             viewModel.languages.collectLatest { res ->
                 res?.let {
                     when (it) {
-                        is Resource.Loading -> {
-
-                        }
+                        is Resource.Loading -> toggleLanguagesLoader(true)
                         is Resource.Error -> {
+                            toggleLanguagesLoader(false)
                             handleError(it)
                         }
                         is Resource.Success -> {
+                            toggleLanguagesLoader(false)
                             displayLanguages(it.data)
                         }
                     }
                 }
             }
+        }
+    }
+
+
+    private fun toggleAuthLoader(show: Boolean) {
+        if (show) {
+            binding.pbAuthor.show()
+        } else {
+            binding.pbAuthor.hide()
+        }
+    }
+
+
+    private fun toggleLanguagesLoader(show: Boolean) {
+        if (show) {
+            binding.pbLanguages.show()
+        } else {
+            binding.pbLanguages.hide()
+        }
+    }
+
+
+    private fun toggleContributorsLoader(show: Boolean) {
+        if (show) {
+            binding.pbContributors.show()
+        } else {
+            binding.pbContributors.hide()
         }
     }
 
@@ -221,10 +253,25 @@ class RepoDetailsFragment : BaseFragment() {
         }
     }
 
+
     private fun viewUserInfoInExternalBrowser() {
         args.repo?.owner?.htmlUrl?.let {
             val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(it))
             startActivity(browserIntent)
+        }
+    }
+
+
+    private fun viewRepoInfoInExternalBrowser() {
+        args.repo?.htmlUrl?.let {
+            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(it))
+            startActivity(browserIntent)
+        }
+    }
+
+    private fun toggleProgress(show: Boolean) {
+        if (show) {
+            binding
         }
     }
 }

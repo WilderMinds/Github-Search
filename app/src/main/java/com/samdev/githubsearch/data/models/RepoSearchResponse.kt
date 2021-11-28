@@ -1,6 +1,7 @@
 package com.samdev.githubsearch.data.models
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 /**
  * @author Sam
@@ -15,4 +16,4 @@ data class RepoSearchResponse(
     val incompleteResults: Boolean = false,
 
     val items: List<Repo> = listOf()
-)
+) : Serializable

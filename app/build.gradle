@@ -102,6 +102,9 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:3.1.0'
     implementation 'com.makeramen:roundedimageview:2.3.0'
 
+    // loader
+    implementation 'com.ericktijerou.koleton:koleton:1.0.0-beta01'
+
     // unit testing
     def arch_version = '2.1.0'
     testImplementation 'junit:junit:4.+'

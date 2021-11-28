@@ -25,4 +25,7 @@
     <string name="languages">Languages</string>
     <string name="contributors">Contributors</string>
     <string name="s_lines_of_code">%s LoC</string>
+    <string name="see_more_on_github">View on GitHub</string>
+    <string name="enter_search_keyword">Enter search keyword</string>
+    <string name="no_results_found">No results found for keyword</string>
 </resources>

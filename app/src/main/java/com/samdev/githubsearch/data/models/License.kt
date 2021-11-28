@@ -1,6 +1,7 @@
 package com.samdev.githubsearch.data.models
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 /**
  * @author Sam
@@ -21,4 +22,4 @@ data class License(
 
     @SerializedName("node_id")
     var nodeId: String? = null
-)
+) : Serializable

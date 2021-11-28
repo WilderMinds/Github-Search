@@ -143,5 +143,25 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cv_sort_layout" />
 
+    <ProgressBar
+        android:id="@+id/pb_search"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <include
+        android:id="@+id/empty_state"
+        layout="@layout/layout_search_empty" />
+
+    <include
+        android:id="@+id/no_results_state"
+        layout="@layout/layout_search_no_results"
+        android:visibility="gone" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

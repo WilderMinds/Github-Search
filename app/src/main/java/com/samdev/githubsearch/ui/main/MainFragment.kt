@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.samdev.githubsearch.R
 import com.samdev.githubsearch.data.models.*
 import com.samdev.githubsearch.databinding.FragmentMainBinding
+import com.samdev.githubsearch.extensions.toggle
 import com.samdev.githubsearch.extensions.toggleAnimateHideShow
 import com.samdev.githubsearch.ui.BaseFragment
 import com.samdev.githubsearch.utils.ErrorUtils
@@ -154,8 +155,9 @@ class MainFragment : BaseFragment() {
         binding.etSearch.addTextChangedListener { editable ->
             editable?.let {
                 val query = it.toString()
+                toggleEmptyState(query.isBlank())
                 if (query.isBlank()) {
-                    showEmptyState()
+                    repoAdapter.submitList(emptyList())
                     return@let
                 }
 
@@ -166,8 +168,13 @@ class MainFragment : BaseFragment() {
     }
 
 
-    private fun showEmptyState() {
+    private fun toggleEmptyState(show: Boolean) {
+        binding.emptyState.root.toggle(show)
+    }
 
+
+    private fun toggleNoResultsState(show: Boolean) {
+        binding.noResultsState.root.toggle(show)
     }
 
 
@@ -180,6 +187,7 @@ class MainFragment : BaseFragment() {
         searchJob = lifecycleScope.launchWhenResumed {
             delay(800)
             viewModel.searchRepositories(query)
+
         }
     }
 
@@ -190,16 +198,18 @@ class MainFragment : BaseFragment() {
                 resource?.let {
                     mFragmentHelper?.hideKeyboard()
                     when (it) {
-                        is Resource.Loading -> {
-
-                        }
+                        is Resource.Loading -> toggleProgress(true)
                         is Resource.Error -> {
+                            toggleProgress(false)
                             handleError(it)
                         }
                         is Resource.Success -> {
+                            toggleProgress(false)
                             val list = it.data.items
                             mRepoList.clear()
                             mRepoList.addAll(list)
+
+                            toggleNoResultsState(list.isEmpty())
                             applySortFilterIfNecessary()
                         }
                     }
@@ -224,6 +234,15 @@ class MainFragment : BaseFragment() {
             val errorMsg = ErrorUtils.getErrorMessage(it, error)
             mFragmentHelper?.showSnackBar(errorMsg)
         }
+    }
+
+
+    private fun toggleProgress(show: Boolean) {
+        if (show) {
+            toggleEmptyState(false)
+            toggleNoResultsState(false)
+        }
+        binding.pbSearch.toggle(show)
     }
 
 }
