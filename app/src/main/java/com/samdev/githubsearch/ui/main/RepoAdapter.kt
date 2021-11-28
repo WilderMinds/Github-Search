@@ -5,10 +5,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
 import com.samdev.githubsearch.R
 import com.samdev.githubsearch.data.models.Repo
 import com.samdev.githubsearch.databinding.ItemRepositoryBinding
+import com.samdev.githubsearch.extensions.loadUrl
 import com.samdev.githubsearch.utils.RepoClickCallback
 import com.samdev.githubsearch.utils.UiUtils
 
@@ -35,7 +35,8 @@ class RepoAdapter(
         fun bind(item: Repo) = with(itemView) {
 
             // Set data to your item view here
-            binding.tvAuthorName.text = item.owner?.login
+            val username = item.owner?.login.orEmpty()
+            binding.tvAuthorName.text = context.getString(R.string.s_username, username)
             binding.tvRepoName.text = item.fullName
             binding.tvDescription.text = item.description
             binding.tvWatchers.text = "${item.watchersCount ?: 0}"
@@ -43,11 +44,7 @@ class RepoAdapter(
             binding.tvIssues.text = "${item.openIssuesCount ?: 0}"
 
             item.owner?.avatarUrl?.let { imageUrl ->
-                binding.ivAvatar.load(imageUrl) {
-                    crossfade(true)
-                    placeholder(R.drawable.avatar)
-                    error(R.drawable.avatar)
-                }
+                binding.ivAvatar.loadUrl(imageUrl)
             }
 
 

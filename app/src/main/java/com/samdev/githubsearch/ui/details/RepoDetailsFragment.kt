@@ -8,12 +8,16 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.GridLayoutManager
 import com.google.gson.JsonObject
 import com.samdev.githubsearch.R
 import com.samdev.githubsearch.data.models.Owner
 import com.samdev.githubsearch.databinding.FragmentRepoDetailsBinding
 import com.samdev.githubsearch.extensions.loadUrl
+import com.samdev.githubsearch.extensions.show
 import com.samdev.githubsearch.ui.BaseFragment
+import com.samdev.githubsearch.ui.details.adapters.ContributorsAdapter
+import com.samdev.githubsearch.ui.details.adapters.LanguageAdapter
 import com.samdev.githubsearch.utils.ErrorUtils
 import com.samdev.githubsearch.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
@@ -84,7 +88,9 @@ class RepoDetailsFragment : BaseFragment() {
             viewModel.userResponse.collectLatest { res ->
                 res?.let {
                     when (it) {
-                        is Resource.Loading -> TODO()
+                        is Resource.Loading -> {
+
+                        }
                         is Resource.Error -> {
                             handleError(it)
                         }
@@ -103,7 +109,9 @@ class RepoDetailsFragment : BaseFragment() {
             viewModel.contributors.collectLatest { res ->
                 res?.let {
                     when (it) {
-                        is Resource.Loading -> TODO()
+                        is Resource.Loading -> {
+
+                        }
                         is Resource.Error -> {
                             handleError(it)
                         }
@@ -122,7 +130,9 @@ class RepoDetailsFragment : BaseFragment() {
             viewModel.languages.collectLatest { res ->
                 res?.let {
                     when (it) {
-                        is Resource.Loading -> TODO()
+                        is Resource.Loading -> {
+
+                        }
                         is Resource.Error -> {
                             handleError(it)
                         }
@@ -160,15 +170,17 @@ class RepoDetailsFragment : BaseFragment() {
     private fun displayUserData(owner: Owner) {
         binding.apply {
             tvAuthorName.text = owner.name
-            tvAuthorUsername.text = owner.login
+            tvAuthorUsername.text = getString(R.string.s_username, owner.login.orEmpty())
 
             val companyName = owner.company.orEmpty()
             if (companyName.isNotBlank()) {
+                tvWorkplace.show()
                 tvWorkplace.text = getString(R.string.works_at_s, companyName)
             }
 
             val location = owner.location.orEmpty()
             if (location.isNotBlank()) {
+                tvLocation.show()
                 tvLocation.text = getString(R.string.lives_at_s, location)
             }
         }
@@ -176,12 +188,33 @@ class RepoDetailsFragment : BaseFragment() {
 
 
     private fun displayContributors(contributors: List<Owner>) {
+        context?.let { c ->
+            val contributorsAdapter = ContributorsAdapter()
+            val gridLayoutManager = GridLayoutManager(c, 4)
 
+            binding.rvContributors.apply {
+                adapter = contributorsAdapter
+                layoutManager = gridLayoutManager
+            }
+
+            contributorsAdapter.submitList(contributors)
+        }
     }
 
 
     private fun displayLanguages(jsonObject: JsonObject) {
-        val languageMap = viewModel.parseLanguagesObject(jsonObject)
+        val languageList = viewModel.parseLanguagesObject(jsonObject)
+        context?.let { c ->
+            val languageAdapter = LanguageAdapter()
+            val gridLayoutManager = GridLayoutManager(c, 4)
+
+            binding.rvLanguages.apply {
+                adapter = languageAdapter
+                layoutManager = gridLayoutManager
+            }
+
+            languageAdapter.submitList(languageList)
+        }
 
     }
 }

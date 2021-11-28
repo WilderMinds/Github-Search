@@ -45,9 +45,17 @@ fun View.toggleAnimateHideShow() {
 fun ImageView.loadUrl(url: String?) {
     url?.let {
         load(url) {
-            crossfade(true)
+            crossfade(false)
             placeholder(R.drawable.avatar)
             error(R.drawable.avatar)
         }
     }
+}
+
+fun View.hide() {
+    visibility = View.GONE
+}
+
+fun View.show() {
+    visibility = View.VISIBLE
 }

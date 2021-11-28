@@ -31,17 +31,17 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintWidth_percent=".3">
 
-                <com.makeramen.roundedimageview.RoundedImageView
+                <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/iv_avatar"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:src="@color/purple_200"
+                    android:scaleType="centerCrop"
+                    app:civ_border_color="@color/white"
+                    app:civ_border_width="1dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:riv_border_color="@color/white"
-                    app:riv_border_width="1dp"
-                    app:riv_oval="true" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/tv_author_name"
@@ -53,6 +53,8 @@
                     android:text="@string/s_username"
                     android:textColor="@color/white"
                     android:textSize="11sp"
+                    android:ellipsize="end"
+                    android:maxLines="2"
                     app:fontFamily="@font/mark_pro_bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -77,7 +79,7 @@
                     android:lines="1"
                     android:maxLines="1"
                     android:text="@string/app_name"
-                    android:textColor="@color/black"
+                    android:textColor="@color/text_color_primary"
                     android:textSize="18sp"
                     app:fontFamily="@font/mark_pro_bold"
                     app:layout_constraintTop_toTopOf="parent" />

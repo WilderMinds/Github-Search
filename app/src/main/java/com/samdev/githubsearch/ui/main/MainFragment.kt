@@ -1,5 +1,7 @@
 package com.samdev.githubsearch.ui.main
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +10,7 @@ import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.samdev.githubsearch.R
 import com.samdev.githubsearch.data.models.Repo
@@ -23,6 +26,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import timber.log.Timber
 
+
 @AndroidEntryPoint
 class MainFragment : BaseFragment() {
 
@@ -35,6 +39,7 @@ class MainFragment : BaseFragment() {
     private lateinit var repoAdapter: RepoAdapter
 
     // debounce search query
+    private var mQuery: String = ""
     private var searchJob: Job? = null
 
     override fun onCreateView(
@@ -101,16 +106,32 @@ class MainFragment : BaseFragment() {
         repoAdapter = RepoAdapter(object : RepoClickCallback {
             override fun onUserImageClicked(repo: Repo) {
                 Timber.e("onUserImageClicked")
+                viewUserInfoInExternalBrowser(repo)
             }
 
             override fun onListItemClicked(repo: Repo) {
                 Timber.e("onListItemClicked")
+                navigateToDetails(repo)
             }
         })
 
         binding.recyclerView.apply {
             adapter = repoAdapter
             layoutManager = linearLayoutManager
+        }
+    }
+
+
+    private fun navigateToDetails(repo: Repo) {
+        val directions = MainFragmentDirections.actionMainFragmentToRepoDetailsFragment(repo)
+        findNavController().navigate(directions)
+    }
+
+
+    private fun viewUserInfoInExternalBrowser(repo: Repo) {
+        repo.owner?.htmlUrl?.let {
+            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(it))
+            startActivity(browserIntent)
         }
     }
 
@@ -138,12 +159,12 @@ class MainFragment : BaseFragment() {
 
     /**
      * Debounce search trigger by cancelling active search job
-     * and delaying 500ms before triggering another search
+     * and delaying 800ms before triggering another search
      */
     private fun searchRepository(query: String) {
         searchJob?.cancel()
         searchJob = lifecycleScope.launchWhenResumed {
-            delay(500)
+            delay(800)
             viewModel.searchRepositories(query)
         }
     }
@@ -158,11 +179,9 @@ class MainFragment : BaseFragment() {
                         is Resource.Loading -> {
 
                         }
-
                         is Resource.Error -> {
                             handleError(it)
                         }
-
                         is Resource.Success -> {
                             val list = it.data.items
                             repoAdapter.submitList(list)

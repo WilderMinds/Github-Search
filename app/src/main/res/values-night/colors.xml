@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="text_color_primary">#EEEEEE</color>
-    <color name="text_color_secondary">#E1E1E1</color>
+    <color name="text_color_secondary">#CAC9C9</color>
     <color name="text_color_hint">#828282</color>
 
     <color name="chip_checked_icon">#F88D21</color>

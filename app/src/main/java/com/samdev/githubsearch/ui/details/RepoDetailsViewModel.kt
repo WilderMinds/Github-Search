@@ -4,8 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.JsonObject
 import com.samdev.githubsearch.R
+import com.samdev.githubsearch.data.models.Language
 import com.samdev.githubsearch.data.models.Owner
 import com.samdev.githubsearch.data.repository.IRepository
+import com.samdev.githubsearch.ui.details.adapters.LanguageAdapter
 import com.samdev.githubsearch.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -67,8 +69,25 @@ class RepoDetailsViewModel @Inject constructor(
     }
 
 
-    fun parseLanguagesObject(jsonObject: JsonObject): Map<String, Long> {
-        return emptyMap()
+    /**
+     * Convert the json object into a [Language] object which can
+     * be passed into the corresponding list adapter [LanguageAdapter]
+     */
+    fun parseLanguagesObject(jsonObject: JsonObject): List<Language> {
+        val result = mutableListOf<Language>()
+        try {
+            jsonObject.keySet().forEach {
+                result.add(
+                    Language(
+                        name = it,
+                        loc = jsonObject.get(it).asLong
+                    )
+                )
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return result
     }
 
 

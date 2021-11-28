@@ -20,6 +20,9 @@
     <string name="sort_by">Sort by</string>
 
     <string name="works_at_s">Works %s</string>
-    <string name="lives_at_s">Lives at %s</string>
+    <string name="lives_at_s">Lives in %s</string>
     <string name="read_more">Read more</string>
+    <string name="languages">Languages</string>
+    <string name="contributors">Contributors</string>
+    <string name="s_lines_of_code">%s LoC</string>
 </resources>
