@@ -61,7 +61,7 @@
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginTop="20dp"
                 android:scaleType="centerCrop"
-                android:src="@color/purple_200"
+                android:src="@drawable/avatar"
                 app:layout_constraintTop_toTopOf="parent"
                 app:riv_corner_radius="10dp" />
 
@@ -69,12 +69,64 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cv_author_info"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="wrap_content"
                 android:layout_marginHorizontal="60dp"
                 android:layout_marginTop="100dp"
                 app:cardElevation="5dp"
                 app:layout_constraintTop_toTopOf="@id/iv_avatar">
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="14dp">
+
+                    <TextView
+                        android:id="@+id/tv_author_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/text_color_primary"
+                        android:textSize="16sp"
+                        app:fontFamily="@font/mark_pro_bold" />
+
+                    <TextView
+                        android:id="@+id/tv_author_username"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/blue"
+                        android:textSize="11sp" />
+
+                    <TextView
+                        android:id="@+id/tv_workplace"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:textColor="@color/text_color_secondary"
+                        android:textSize="14sp"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/tv_location"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/text_color_secondary"
+                        android:textSize="14sp"
+                        android:visibility="gone" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btn_read_more_author"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:background="@drawable/background_primary_button"
+                        android:text="@string/read_more"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        app:fontFamily="@font/mark_pro_bold" />
+
+                </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
 

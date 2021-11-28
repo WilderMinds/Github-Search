@@ -60,5 +60,38 @@ data class Owner(
     var type: String? = null,
 
     @SerializedName("site_admin")
-    var siteAdmin: Boolean? = null
+    var siteAdmin: Boolean = false,
+
+    @SerializedName("name")
+    var name: String? = "",
+
+    @SerializedName("company")
+    var company: String? = "",
+
+    @SerializedName("blog")
+    var blog: String? = "",
+
+    @SerializedName("location")
+    var location: String? = "",
+
+    @SerializedName("email")
+    var email: String? = "",
+
+    @SerializedName("hireable")
+    var hireable: String? = null,
+
+    @SerializedName("bio")
+    var bio: String? = "",
+
+    @SerializedName("twitter_username")
+    var twitterUsername: String? = "",
+
+    @SerializedName("public_repos")
+    var publicRepos: Int = 0,
+
+    @SerializedName("public_gists")
+    var publicGists: Int = 0,
+
+    @SerializedName("followers")
+    var followers: Int = 0,
 )

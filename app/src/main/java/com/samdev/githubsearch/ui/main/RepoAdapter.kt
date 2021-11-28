@@ -5,6 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
+import com.samdev.githubsearch.R
 import com.samdev.githubsearch.data.models.Repo
 import com.samdev.githubsearch.databinding.ItemRepositoryBinding
 import com.samdev.githubsearch.utils.RepoClickCallback
@@ -39,6 +41,15 @@ class RepoAdapter(
             binding.tvWatchers.text = "${item.watchersCount ?: 0}"
             binding.tvForks.text = "${item.forksCount ?: 0}"
             binding.tvIssues.text = "${item.openIssuesCount ?: 0}"
+
+            item.owner?.avatarUrl?.let { imageUrl ->
+                binding.ivAvatar.load(imageUrl) {
+                    crossfade(true)
+                    placeholder(R.drawable.avatar)
+                    error(R.drawable.avatar)
+                }
+            }
+
 
             // assign random color
             val randomColor = UiUtils.generateRandomColor()

@@ -2,6 +2,8 @@ package com.samdev.githubsearch.extensions
 
 import android.view.View
 import android.view.animation.AnimationUtils
+import android.widget.ImageView
+import coil.load
 import com.samdev.githubsearch.R
 
 /**
@@ -36,5 +38,16 @@ fun View.toggleAnimateHideShow() {
         animateHide()
     } else {
         animateShow()
+    }
+}
+
+
+fun ImageView.loadUrl(url: String?) {
+    url?.let {
+        load(url) {
+            crossfade(true)
+            placeholder(R.drawable.avatar)
+            error(R.drawable.avatar)
+        }
     }
 }

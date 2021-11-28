@@ -1,6 +1,7 @@
 package com.samdev.githubsearch.data.models
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 /**
  * @author Sam
@@ -212,7 +213,7 @@ data class Repo(
     var openIssuesCount: Int? = 0,
 
     @SerializedName("license")
-    var license: String? = "",
+    var license: License? = null,
 
     @SerializedName("allow_forking")
     var allowForking: Boolean = false,
@@ -246,4 +247,4 @@ data class Repo(
 
     @SerializedName("subscribers_count")
     var subscribersCount: Int? = 0
-)
+) : Serializable

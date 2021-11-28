@@ -9,5 +9,20 @@
         android:id="@+id/mainFragment"
         android:name="com.samdev.githubsearch.ui.main.MainFragment"
         android:label="fragment_main"
-        tools:layout="@layout/fragment_main" />
+        tools:layout="@layout/fragment_main">
+        <action
+            android:id="@+id/action_mainFragment_to_repoDetailsFragment"
+            app:destination="@id/repoDetailsFragment"
+            app:popUpTo="@id/mainFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/repoDetailsFragment"
+        android:name="com.samdev.githubsearch.ui.details.RepoDetailsFragment"
+        android:label="fragment_repo_details"
+        tools:layout="@layout/fragment_repo_details">
+        <argument
+            android:name="repo"
+            app:argType="com.samdev.githubsearch.data.models.Repo"
+            app:nullable="true" />
+    </fragment>
 </navigation>
