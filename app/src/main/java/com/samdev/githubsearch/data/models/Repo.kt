@@ -1,7 +1,9 @@
 package com.samdev.githubsearch.data.models
 
 import com.google.gson.annotations.SerializedName
+import com.samdev.githubsearch.utils.DateUtils
 import java.io.Serializable
+import java.util.*
 
 /**
  * @author Sam
@@ -248,3 +250,47 @@ data class Repo(
     @SerializedName("subscribers_count")
     var subscribersCount: Int? = 0
 ) : Serializable
+
+
+/**
+ * Sorted in descending order
+ */
+class RepoStarsComparator : Comparator<Repo> {
+    override fun compare(o1: Repo, o2: Repo): Int {
+        val stars1 = o1.stargazersCount ?: 0
+        val stars2 = o2.stargazersCount ?: 0
+        return when {
+            stars1 == stars2 -> 0
+            stars1 > stars2 -> -1
+            else -> 1
+        }
+    }
+}
+
+
+/**
+ * Sorted in descending order
+ */
+class RepoForksComparator : Comparator<Repo> {
+    override fun compare(o1: Repo, o2: Repo): Int {
+        val forks1 = o1.forksCount ?: 0
+        val forks2 = o2.forksCount ?: 0
+        return when {
+            forks1 == forks2 -> 0
+            forks1 > forks2 -> -1
+            else -> 1
+        }
+    }
+}
+
+
+/**
+ * Sorted in descending order
+ */
+class RepoUpdatedComparator : Comparator<Repo> {
+    override fun compare(o1: Repo, o2: Repo): Int {
+        val date1 = DateUtils.stringToDate(o1.updatedAt) ?: Date()
+        val date2 = DateUtils.stringToDate(o2.updatedAt) ?: Date()
+        return date2.compareTo(date1)
+    }
+}

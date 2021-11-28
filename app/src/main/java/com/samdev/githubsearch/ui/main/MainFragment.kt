@@ -13,7 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.samdev.githubsearch.R
-import com.samdev.githubsearch.data.models.Repo
+import com.samdev.githubsearch.data.models.*
 import com.samdev.githubsearch.databinding.FragmentMainBinding
 import com.samdev.githubsearch.extensions.toggleAnimateHideShow
 import com.samdev.githubsearch.ui.BaseFragment
@@ -25,6 +25,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import timber.log.Timber
+import java.util.*
 
 
 @AndroidEntryPoint
@@ -41,6 +42,10 @@ class MainFragment : BaseFragment() {
     // debounce search query
     private var mQuery: String = ""
     private var searchJob: Job? = null
+    private var sortState = SortState.NONE
+
+    // list
+    private var mRepoList: MutableList<Repo> = mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -66,28 +71,40 @@ class MainFragment : BaseFragment() {
     private fun initSortUI() {
         binding.btnSort.setOnClickListener {
             toggleSortUI()
-
         }
 
-        // setup and listen for selected items
+        // listen for sort by changed
         binding.chipGroupSort.setOnCheckedChangeListener { _, checkedId ->
             Timber.e("checked id -> $checkedId")
             when (checkedId) {
                 R.id.chip_stars -> {
-                    Timber.e("filter by stars")
+                    sortState = SortState.STARS
+                    applySortComparator(RepoStarsComparator())
                 }
                 R.id.chip_forks -> {
-                    Timber.e("filter by forks")
+                    sortState = SortState.FORKS
+                    applySortComparator(RepoForksComparator())
                 }
                 R.id.chip_updated -> {
-                    Timber.e("filter by updated")
+                    sortState = SortState.UPDATED
+                    applySortComparator(RepoUpdatedComparator())
                 }
                 else -> {
-                    // nothing selected
+                    sortState = SortState.NONE
                     Timber.e("nothing selected")
                 }
             }
         }
+    }
+
+
+    /**
+     * Apply relevant sort comparator and reload the list
+     */
+    private fun applySortComparator(comparator: Comparator<Repo>) {
+        val sortedList: List<Repo> = mRepoList.toList()
+        Collections.sort(sortedList, comparator)
+        repoAdapter.submitList(sortedList)
     }
 
 
@@ -96,7 +113,6 @@ class MainFragment : BaseFragment() {
             Toast.makeText(context, getString(R.string.no_items_to_sort), Toast.LENGTH_SHORT).show()
             return
         }
-
         binding.cvSortLayout.toggleAnimateHideShow()
     }
 
@@ -105,12 +121,10 @@ class MainFragment : BaseFragment() {
         val linearLayoutManager = LinearLayoutManager(context)
         repoAdapter = RepoAdapter(object : RepoClickCallback {
             override fun onUserImageClicked(repo: Repo) {
-                Timber.e("onUserImageClicked")
                 viewUserInfoInExternalBrowser(repo)
             }
 
             override fun onListItemClicked(repo: Repo) {
-                Timber.e("onListItemClicked")
                 navigateToDetails(repo)
             }
         })
@@ -184,13 +198,26 @@ class MainFragment : BaseFragment() {
                         }
                         is Resource.Success -> {
                             val list = it.data.items
-                            repoAdapter.submitList(list)
+                            mRepoList.clear()
+                            mRepoList.addAll(list)
+                            applySortFilterIfNecessary()
                         }
                     }
                 }
             }
         }
     }
+
+
+    private fun applySortFilterIfNecessary() {
+        when (sortState) {
+            SortState.STARS -> applySortComparator(RepoStarsComparator())
+            SortState.FORKS -> applySortComparator(RepoForksComparator())
+            SortState.UPDATED -> applySortComparator(RepoUpdatedComparator())
+            SortState.NONE -> repoAdapter.submitList(mRepoList)
+        }
+    }
+
 
     private fun handleError(error: Resource.Error) {
         context?.let {
