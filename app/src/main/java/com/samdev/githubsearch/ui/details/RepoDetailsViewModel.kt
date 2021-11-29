@@ -48,24 +48,27 @@ class RepoDetailsViewModel @Inject constructor(
         fetchLanguages(userName, repo)
     }
 
-    private fun fetchUser(userName: String) = viewModelScope.launch {
+    private suspend fun fetchUser(userName: String) {
         _userResponse.value = Resource.Loading
         val response = repository.fetchUser(userName)
         _userResponse.value = response
+        println("fetched user")
     }
 
 
-    private fun fetchContributors(userName: String, repo: String) = viewModelScope.launch {
+    private suspend fun fetchContributors(userName: String, repo: String) {
         _contributors.value = Resource.Loading
         val response = repository.fetchContributors(userName, repo)
         _contributors.value = response
+        println("fetched contributors")
     }
 
 
-    private fun fetchLanguages(userName: String, repo: String) = viewModelScope.launch {
+    private suspend fun fetchLanguages(userName: String, repo: String) {
         _languages.value = Resource.Loading
         val response = repository.fetchLanguages(userName, repo)
         _languages.value = response
+        println("fetched languages")
     }
 
 
@@ -77,12 +80,15 @@ class RepoDetailsViewModel @Inject constructor(
         val result = mutableListOf<Language>()
         try {
             jsonObject.keySet().forEach {
-                result.add(
-                    Language(
-                        name = it,
-                        loc = jsonObject.get(it).asLong
+                val value = jsonObject.get(it)
+                if (value.isJsonPrimitive) {
+                    result.add(
+                        Language(
+                            name = it,
+                            loc = value.asLong
+                        )
                     )
-                )
+                }
             }
         } catch (e: Exception) {
             e.printStackTrace()

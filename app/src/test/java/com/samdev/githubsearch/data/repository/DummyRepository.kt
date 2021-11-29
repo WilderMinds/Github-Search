@@ -22,6 +22,7 @@ class DummyRepository : IRepository {
     }
 
     override suspend fun fetchUser(username: String): Resource<Owner> {
+        println("repo fetch user")
         return if (networkError) {
             Resource.Error(errorMsg = "Unable to fetch data")
         } else {
@@ -33,6 +34,7 @@ class DummyRepository : IRepository {
         username: String,
         repository: String
     ): Resource<List<Owner>> {
+        println("repo fetch contribs")
         return if (networkError) {
             Resource.Error(errorMsg = "Unable to fetch data")
         } else {
@@ -44,6 +46,7 @@ class DummyRepository : IRepository {
         username: String,
         repository: String
     ): Resource<JsonObject> {
+        println("repo fetch languages")
         return if (networkError) {
             Resource.Error(errorMsg = "Unable to fetch data")
         } else {
