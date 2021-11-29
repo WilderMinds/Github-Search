@@ -1,6 +1,7 @@
 package com.samdev.githubsearch.ui
 
 import android.os.Bundle
+import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
@@ -37,10 +38,9 @@ class MainActivity : AppCompatActivity(), FragmentHelper {
     }
 
     override fun showSnackBar(msg: String) {
-        this.currentFocus?.let {
-            val snackBar = Snackbar.make(it, msg, Snackbar.LENGTH_LONG)
-            snackBar.show()
-        }
+        val view = findViewById<View>(android.R.id.content)
+        val snackBar = Snackbar.make(view, msg, Snackbar.LENGTH_LONG)
+        snackBar.show()
     }
 
     /**
