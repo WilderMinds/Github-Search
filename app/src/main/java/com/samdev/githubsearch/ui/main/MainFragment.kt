@@ -15,6 +15,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.samdev.githubsearch.App
 import com.samdev.githubsearch.R
 import com.samdev.githubsearch.data.models.*
@@ -45,7 +46,6 @@ class MainFragment : BaseFragment() {
     private lateinit var repoAdapter: RepoAdapter
 
     // debounce search query
-    private var mQuery: String = ""
     private var searchJob: Job? = null
     private var sortState = SortState.NONE
 
@@ -147,6 +147,8 @@ class MainFragment : BaseFragment() {
                 navigateToDetails(repo, imageView)
             }
         })
+        repoAdapter.stateRestorationPolicy =
+            RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
 
         binding.recyclerView.apply {
             adapter = repoAdapter
@@ -257,7 +259,7 @@ class MainFragment : BaseFragment() {
                             mRepoList.addAll(list)
 
                             toggleNoResultsState(list.isEmpty())
-                            applySortFilterIfNecessary()
+                            applySortFilterIfNecessary(list)
                         }
                     }
                 }
@@ -266,12 +268,12 @@ class MainFragment : BaseFragment() {
     }
 
 
-    private fun applySortFilterIfNecessary() {
+    private fun applySortFilterIfNecessary(list: List<Repo>) {
         when (sortState) {
             SortState.STARS -> applySortComparator(RepoStarsComparator())
             SortState.FORKS -> applySortComparator(RepoForksComparator())
             SortState.UPDATED -> applySortComparator(RepoUpdatedComparator())
-            SortState.NONE -> repoAdapter.submitList(mRepoList)
+            SortState.NONE -> repoAdapter.submitList(list)
         }
     }
 

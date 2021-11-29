@@ -25,7 +25,25 @@ class MainViewModel @Inject constructor(
 
     fun searchRepositories(query: String) = viewModelScope.launch {
         _searchResponse.value = Resource.Loading
+
+        // check and return from cache if exists
+        val cachedResults = hasCache(query)
+        if (cachedResults.isNotEmpty()) {
+            val tempResults = Resource.Success(
+                RepoSearchResponse(items = cachedResults)
+            )
+            _searchResponse.value = tempResults
+        }
+
+        // request from API
         val response = repository.searchRepositories(query)
+
+        // cache result
+        if (response is Resource.Success) {
+            cacheResults(query, response.data)
+        }
+
+        // return api result finally
         _searchResponse.value = response
     }
 
