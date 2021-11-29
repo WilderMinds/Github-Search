@@ -203,6 +203,7 @@ class MainFragment : BaseFragment() {
                 val query = it.toString()
                 toggleEmptyState(query.isBlank())
                 if (query.isBlank()) {
+                    searchJob?.cancel()
                     repoAdapter.submitList(emptyList())
                     return@let
                 }
