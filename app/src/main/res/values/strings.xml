@@ -29,4 +29,5 @@
     <string name="enter_search_keyword">Enter search keyword</string>
     <string name="no_results_found">No results found for keyword</string>
     <string name="limited_feature">Upgrade to pro version to use this feature</string>
+    <string name="cd_displays_the_authors_image">displays the authors image</string>
 </resources>

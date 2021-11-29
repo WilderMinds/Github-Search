@@ -6,19 +6,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.transition.TransitionInflater
+import coil.load
+import coil.request.ImageRequest
+import coil.request.ImageResult
 import com.google.gson.JsonObject
 import com.samdev.githubsearch.R
 import com.samdev.githubsearch.data.models.Owner
 import com.samdev.githubsearch.databinding.FragmentRepoDetailsBinding
 import com.samdev.githubsearch.extensions.hide
-import com.samdev.githubsearch.extensions.loadUrl
 import com.samdev.githubsearch.extensions.show
 import com.samdev.githubsearch.ui.BaseFragment
 import com.samdev.githubsearch.ui.details.adapters.ContributorsAdapter
@@ -28,7 +29,6 @@ import com.samdev.githubsearch.utils.ItemClickedCallback
 import com.samdev.githubsearch.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-import timber.log.Timber
 
 @AndroidEntryPoint
 class RepoDetailsFragment : BaseFragment() {
@@ -41,34 +41,49 @@ class RepoDetailsFragment : BaseFragment() {
     private val args: RepoDetailsFragmentArgs by navArgs()
     private lateinit var binding: FragmentRepoDetailsBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        context?.let {
-            sharedElementEnterTransition =
-                TransitionInflater.from(it).inflateTransition(android.R.transition.move)
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentRepoDetailsBinding.inflate(inflater, container, false)
-        binding.root.doOnPreDraw {
-            Timber.e("on predraw")
-            startPostponedEnterTransition()
-        }
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        context?.let {
+            sharedElementEnterTransition =
+                TransitionInflater.from(it).inflateTransition(android.R.transition.move)
+            postponeEnterTransition()
+        }
         displayExistingData()
         fetchAdditionalData()
         observeUserData()
         observeContributors()
         observeLanguages()
         initClickActions()
+    }
+
+
+    private fun startTransitionAfterImageLoad(url: String) {
+        binding.ivAvatar.load(url) {
+            listener(object : ImageRequest.Listener {
+                override fun onCancel(request: ImageRequest) {
+                    super.onCancel(request)
+                    startPostponedEnterTransition()
+                }
+
+                override fun onError(request: ImageRequest, throwable: Throwable) {
+                    super.onError(request, throwable)
+                    startPostponedEnterTransition()
+                }
+
+                override fun onSuccess(request: ImageRequest, metadata: ImageResult.Metadata) {
+                    super.onSuccess(request, metadata)
+                    startPostponedEnterTransition()
+                }
+            })
+        }
     }
 
 
@@ -212,13 +227,17 @@ class RepoDetailsFragment : BaseFragment() {
 
                 // setup image transition
                 ivAvatar.transitionName = "${repo.id}"
+                val imageUrl = repo.owner?.avatarUrl.orEmpty()
+
+                if (imageUrl.isBlank()) {
+                    startPostponedEnterTransition()
+                } else {
+                    startTransitionAfterImageLoad(imageUrl)
+                }
 
                 // display text
                 tvRepoName.text = repo.fullName
                 tvRepoDescription.text = repo.description ?: "N/A"
-
-                val imageUrl = repo.owner?.avatarUrl
-                ivAvatar.loadUrl(imageUrl)
             }
         }
 
