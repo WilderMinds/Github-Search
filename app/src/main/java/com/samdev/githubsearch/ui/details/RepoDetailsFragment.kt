@@ -15,7 +15,6 @@ import androidx.transition.TransitionInflater
 import coil.load
 import coil.request.ImageRequest
 import coil.request.ImageResult
-import com.google.gson.JsonObject
 import com.samdev.githubsearch.R
 import com.samdev.githubsearch.data.models.Owner
 import com.samdev.githubsearch.databinding.FragmentRepoDetailsBinding
@@ -27,6 +26,7 @@ import com.samdev.githubsearch.ui.details.adapters.LanguageAdapter
 import com.samdev.githubsearch.utils.ErrorUtils
 import com.samdev.githubsearch.utils.ItemClickedCallback
 import com.samdev.githubsearch.utils.Resource
+import com.samdev.githubsearch.utils.toLanguageList
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 
@@ -288,8 +288,8 @@ class RepoDetailsFragment : BaseFragment() {
     }
 
 
-    private fun displayLanguages(jsonObject: JsonObject) {
-        val languageList = viewModel.parseLanguagesObject(jsonObject)
+    private fun displayLanguages(map: Map<String, Long>) {
+        val languageList = map.toLanguageList()
         context?.let { c ->
             val languageAdapter = LanguageAdapter()
             val gridLayoutManager = GridLayoutManager(c, 4)

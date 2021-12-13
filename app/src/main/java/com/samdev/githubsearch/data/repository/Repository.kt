@@ -1,6 +1,5 @@
 package com.samdev.githubsearch.data.repository
 
-import com.google.gson.JsonObject
 import com.samdev.githubsearch.data.models.Owner
 import com.samdev.githubsearch.data.models.RepoSearchResponse
 import com.samdev.githubsearch.data.network.ApiService
@@ -43,7 +42,7 @@ class Repository @Inject constructor(
     override suspend fun fetchLanguages(
         username: String,
         repository: String
-    ): Resource<JsonObject> {
+    ): Resource<Map<String, Long>> {
         return makeApiRequest {
             apiService.fetchLanguages(username, repository)
         }

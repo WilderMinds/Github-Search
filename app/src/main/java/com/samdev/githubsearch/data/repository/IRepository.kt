@@ -1,6 +1,5 @@
 package com.samdev.githubsearch.data.repository
 
-import com.google.gson.JsonObject
 import com.samdev.githubsearch.data.models.Owner
 import com.samdev.githubsearch.data.models.RepoSearchResponse
 import com.samdev.githubsearch.utils.Resource
@@ -17,6 +16,6 @@ interface IRepository {
 
     suspend fun fetchContributors(username: String, repository: String): Resource<List<Owner>>
 
-    suspend fun fetchLanguages(username: String, repository: String): Resource<JsonObject>
+    suspend fun fetchLanguages(username: String, repository: String): Resource<Map<String, Long>>
 
 }

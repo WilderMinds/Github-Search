@@ -2,12 +2,9 @@ package com.samdev.githubsearch.ui.details
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.gson.JsonObject
 import com.samdev.githubsearch.R
-import com.samdev.githubsearch.data.models.Language
 import com.samdev.githubsearch.data.models.Owner
 import com.samdev.githubsearch.data.repository.IRepository
-import com.samdev.githubsearch.ui.details.adapters.LanguageAdapter
 import com.samdev.githubsearch.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,8 +24,8 @@ class RepoDetailsViewModel @Inject constructor(
     private var _contributors = MutableStateFlow<Resource<List<Owner>>?>(null)
     val contributors: StateFlow<Resource<List<Owner>>?> = _contributors
 
-    private var _languages = MutableStateFlow<Resource<JsonObject>?>(null)
-    val languages: StateFlow<Resource<JsonObject>?> = _languages
+    private var _languages = MutableStateFlow<Resource<Map<String, Long>>?>(null)
+    val languages: StateFlow<Resource<Map<String, Long>>?> = _languages
 
 
     /**
@@ -70,31 +67,4 @@ class RepoDetailsViewModel @Inject constructor(
         _languages.value = response
         println("fetched languages")
     }
-
-
-    /**
-     * Convert the json object into a [Language] object which can
-     * be passed into the corresponding list adapter [LanguageAdapter]
-     */
-    fun parseLanguagesObject(jsonObject: JsonObject): List<Language> {
-        val result = mutableListOf<Language>()
-        try {
-            jsonObject.keySet().forEach {
-                val value = jsonObject.get(it)
-                if (value.isJsonPrimitive) {
-                    result.add(
-                        Language(
-                            name = it,
-                            loc = value.asLong
-                        )
-                    )
-                }
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        return result
-    }
-
-
 }

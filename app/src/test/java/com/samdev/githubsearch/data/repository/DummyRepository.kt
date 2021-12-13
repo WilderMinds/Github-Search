@@ -1,6 +1,5 @@
 package com.samdev.githubsearch.data.repository
 
-import com.google.gson.JsonObject
 import com.samdev.githubsearch.data.models.Owner
 import com.samdev.githubsearch.data.models.RepoSearchResponse
 import com.samdev.githubsearch.utils.Resource
@@ -45,14 +44,16 @@ class DummyRepository : IRepository {
     override suspend fun fetchLanguages(
         username: String,
         repository: String
-    ): Resource<JsonObject> {
+    ): Resource<Map<String, Long>> {
         println("repo fetch languages")
         return if (networkError) {
             Resource.Error(errorMsg = "Unable to fetch data")
         } else {
-            Resource.Success(JsonObject().apply {
-                addProperty("dart", 34231)
-            })
+            Resource.Success(
+                mapOf(
+                    Pair("dart", 34231)
+                )
+            )
         }
     }
 

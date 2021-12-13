@@ -1,6 +1,5 @@
 package com.samdev.githubsearch.data.network
 
-import com.google.gson.JsonObject
 import com.samdev.githubsearch.data.models.Owner
 import com.samdev.githubsearch.data.models.RepoSearchResponse
 import retrofit2.http.GET
@@ -29,6 +28,6 @@ interface ApiService {
     suspend fun fetchLanguages(
         @Path("username") username: String,
         @Path("repo") repository: String
-    ): JsonObject
+    ): Map<String, Long>
 
 }
