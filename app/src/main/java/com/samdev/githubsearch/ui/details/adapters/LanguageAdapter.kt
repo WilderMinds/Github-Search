@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.samdev.githubsearch.R
-import com.samdev.githubsearch.data.models.Language
+import com.samdev.githubsearch.core.domain.Language
 import com.samdev.githubsearch.databinding.ItemLanguageBinding
 
 class LanguageAdapter :

@@ -16,7 +16,9 @@ import coil.load
 import coil.request.ImageRequest
 import coil.request.ImageResult
 import com.samdev.githubsearch.R
-import com.samdev.githubsearch.data.models.Owner
+import com.samdev.githubsearch.core.domain.Owner
+import com.samdev.githubsearch.core.utils.Resource
+import com.samdev.githubsearch.core.utils.toLanguageList
 import com.samdev.githubsearch.databinding.FragmentRepoDetailsBinding
 import com.samdev.githubsearch.extensions.hide
 import com.samdev.githubsearch.extensions.show
@@ -25,8 +27,6 @@ import com.samdev.githubsearch.ui.details.adapters.ContributorsAdapter
 import com.samdev.githubsearch.ui.details.adapters.LanguageAdapter
 import com.samdev.githubsearch.utils.ErrorUtils
 import com.samdev.githubsearch.utils.ItemClickedCallback
-import com.samdev.githubsearch.utils.Resource
-import com.samdev.githubsearch.utils.toLanguageList
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 
@@ -227,7 +227,7 @@ class RepoDetailsFragment : BaseFragment() {
 
                 // setup image transition
                 ivAvatar.transitionName = "${repo.id}"
-                val imageUrl = repo.owner?.avatarUrl.orEmpty()
+                val imageUrl = repo.owner?.avatar_url.orEmpty()
 
                 if (imageUrl.isBlank()) {
                     startPostponedEnterTransition()
@@ -236,7 +236,7 @@ class RepoDetailsFragment : BaseFragment() {
                 }
 
                 // display text
-                tvRepoName.text = repo.fullName
+                tvRepoName.text = repo.full_name
                 tvRepoDescription.text = repo.description ?: "N/A"
             }
         }
@@ -269,7 +269,7 @@ class RepoDetailsFragment : BaseFragment() {
             val contributorsAdapter = ContributorsAdapter(object : ItemClickedCallback {
                 override fun onItemClicked(item: Any?) {
                     if (item is Owner) {
-                        item.htmlUrl?.let {
+                        item.html_url?.let {
                             val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(it))
                             startActivity(browserIntent)
                         }
@@ -305,7 +305,7 @@ class RepoDetailsFragment : BaseFragment() {
 
 
     private fun viewUserInfoInExternalBrowser() {
-        args.repo?.owner?.htmlUrl?.let {
+        args.repo?.owner?.html_url?.let {
             val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(it))
             startActivity(browserIntent)
         }
@@ -313,7 +313,7 @@ class RepoDetailsFragment : BaseFragment() {
 
 
     private fun viewRepoInfoInExternalBrowser() {
-        args.repo?.htmlUrl?.let {
+        args.repo?.html_url?.let {
             val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(it))
             startActivity(browserIntent)
         }

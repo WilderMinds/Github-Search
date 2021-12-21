@@ -2,9 +2,15 @@ package com.samdev.githubsearch.di
 
 import com.samdev.githubsearch.AppConstants
 import com.samdev.githubsearch.BuildConfig
-import com.samdev.githubsearch.data.network.ApiService
-import com.samdev.githubsearch.data.network.AuthInterceptor
-import com.samdev.githubsearch.data.preference.PrefManager
+import com.samdev.githubsearch.core.data.datasources.LanguageDataSource
+import com.samdev.githubsearch.core.data.datasources.OwnerDataSource
+import com.samdev.githubsearch.core.data.datasources.RepoDataSource
+import com.samdev.githubsearch.framework.datasources.RemoteLanguageDataSource
+import com.samdev.githubsearch.framework.datasources.RemoteOwnerDataSource
+import com.samdev.githubsearch.framework.datasources.RemoteRepoDataSource
+import com.samdev.githubsearch.framework.network.ApiService
+import com.samdev.githubsearch.framework.network.AuthInterceptor
+import com.samdev.githubsearch.framework.preference.PrefManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -71,4 +77,25 @@ object NetworkModule {
     ): ApiService = retrofit.create(
         ApiService::class.java
     )
+
+
+    @Singleton
+    @Provides
+    fun provideRemoteLanguageDataSource(
+        apiService: ApiService
+    ): LanguageDataSource = RemoteLanguageDataSource(apiService)
+
+
+    @Singleton
+    @Provides
+    fun provideRemoteOwnerDataSource(
+        apiService: ApiService
+    ): OwnerDataSource = RemoteOwnerDataSource(apiService)
+
+
+    @Singleton
+    @Provides
+    fun provideRemoteRepoDataSource(
+        apiService: ApiService
+    ): RepoDataSource = RemoteRepoDataSource(apiService)
 }

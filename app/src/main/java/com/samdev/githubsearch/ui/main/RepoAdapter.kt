@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.samdev.githubsearch.R
-import com.samdev.githubsearch.data.models.Repo
+import com.samdev.githubsearch.core.domain.Repo
 import com.samdev.githubsearch.databinding.ItemRepositoryBinding
 import com.samdev.githubsearch.extensions.loadUrl
 import com.samdev.githubsearch.utils.RepoClickCallback
@@ -37,15 +37,15 @@ class RepoAdapter(
             // Set data to your item view here
             val username = item.owner?.login.orEmpty()
             binding.tvAuthorName.text = context.getString(R.string.s_username, username)
-            binding.tvRepoName.text = item.fullName
+            binding.tvRepoName.text = item.full_name
             binding.tvDescription.text = item.description
-            binding.tvWatchers.text = "${item.watchersCount ?: 0}"
-            binding.tvForks.text = "${item.forksCount ?: 0}"
-            binding.tvIssues.text = "${item.openIssuesCount ?: 0}"
+            binding.tvWatchers.text = "${item.watchers_count ?: 0}"
+            binding.tvForks.text = "${item.forks_count ?: 0}"
+            binding.tvIssues.text = "${item.open_issues_count ?: 0}"
 
             // using the id because we want a unique transition name
             binding.ivAvatar.transitionName = "${item.id}"
-            item.owner?.avatarUrl?.let { imageUrl ->
+            item.owner?.avatar_url?.let { imageUrl ->
                 binding.ivAvatar.loadUrl(imageUrl)
             }
 

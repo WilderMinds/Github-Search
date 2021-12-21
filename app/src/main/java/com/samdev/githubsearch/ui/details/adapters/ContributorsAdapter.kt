@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.samdev.githubsearch.R
-import com.samdev.githubsearch.data.models.Owner
+import com.samdev.githubsearch.core.domain.Owner
 import com.samdev.githubsearch.databinding.ItemContributorsBinding
 import com.samdev.githubsearch.extensions.loadUrl
 import com.samdev.githubsearch.utils.ItemClickedCallback
@@ -34,7 +34,7 @@ class ContributorsAdapter(
 
         fun bind(item: Owner) = with(itemView) {
             // Set data to your item view here
-            binding.ivAvatar.loadUrl(item.avatarUrl)
+            binding.ivAvatar.loadUrl(item.avatar_url)
             binding.tvUsername.text = context.getString(R.string.s_username, item.login)
 
             setOnClickListener {

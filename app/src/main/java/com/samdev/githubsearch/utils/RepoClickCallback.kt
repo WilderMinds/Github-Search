@@ -1,7 +1,7 @@
 package com.samdev.githubsearch.utils
 
 import android.widget.ImageView
-import com.samdev.githubsearch.data.models.Repo
+import com.samdev.githubsearch.core.domain.Repo
 
 /**
  * @author Sam

@@ -1,5 +1,7 @@
 package com.samdev.githubsearch.utils
 
+import com.samdev.githubsearch.core.utils.Resource
+
 /**
  * @author Sam
  * Created 27/11/2021 at 1:49 PM

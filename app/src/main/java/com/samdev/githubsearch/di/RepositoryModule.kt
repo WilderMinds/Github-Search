@@ -1,8 +1,11 @@
 package com.samdev.githubsearch.di
 
-import com.samdev.githubsearch.data.network.ApiService
-import com.samdev.githubsearch.data.repository.IRepository
-import com.samdev.githubsearch.data.repository.Repository
+import com.samdev.githubsearch.core.data.datasources.LanguageDataSource
+import com.samdev.githubsearch.core.data.datasources.OwnerDataSource
+import com.samdev.githubsearch.core.data.datasources.RepoDataSource
+import com.samdev.githubsearch.core.data.repositories.LanguageRepository
+import com.samdev.githubsearch.core.data.repositories.OwnerRepository
+import com.samdev.githubsearch.core.data.repositories.RepoRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,7 +22,22 @@ object RepositoryModule {
 
     @Singleton
     @Provides
-    fun providesRepository(
-        apiService: ApiService
-    ): IRepository = Repository(apiService)
+    fun providesLanguageRepository(
+        dataSource: LanguageDataSource
+    ): LanguageRepository = LanguageRepository(dataSource)
+
+
+    @Singleton
+    @Provides
+    fun providesOwnerRepository(
+        dataSource: OwnerDataSource
+    ): OwnerRepository = OwnerRepository(dataSource)
+
+
+    @Singleton
+    @Provides
+    fun providesRepoRepository(
+        dataSource: RepoDataSource
+    ): RepoRepository = RepoRepository(dataSource)
+
 }

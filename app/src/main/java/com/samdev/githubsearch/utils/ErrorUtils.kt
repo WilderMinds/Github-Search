@@ -2,6 +2,7 @@ package com.samdev.githubsearch.utils
 
 import android.content.Context
 import com.samdev.githubsearch.R
+import com.samdev.githubsearch.core.utils.Resource
 import retrofit2.HttpException
 import timber.log.Timber
 import java.io.IOException

@@ -1,8 +1,8 @@
 package com.samdev.githubsearch.di
 
 import android.content.Context
-import com.samdev.githubsearch.data.preference.IPrefManager
-import com.samdev.githubsearch.data.preference.PrefManager
+import com.samdev.githubsearch.framework.preference.IPrefManager
+import com.samdev.githubsearch.framework.preference.PrefManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

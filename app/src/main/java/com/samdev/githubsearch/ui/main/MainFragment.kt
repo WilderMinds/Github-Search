@@ -18,14 +18,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.samdev.githubsearch.App
 import com.samdev.githubsearch.R
-import com.samdev.githubsearch.data.models.*
+import com.samdev.githubsearch.core.domain.*
+import com.samdev.githubsearch.core.usecases.SortRepositories
+import com.samdev.githubsearch.core.utils.Resource
 import com.samdev.githubsearch.databinding.FragmentMainBinding
 import com.samdev.githubsearch.extensions.toggle
 import com.samdev.githubsearch.extensions.toggleAnimateHideShow
 import com.samdev.githubsearch.ui.BaseFragment
 import com.samdev.githubsearch.utils.ErrorUtils
 import com.samdev.githubsearch.utils.RepoClickCallback
-import com.samdev.githubsearch.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -83,34 +84,23 @@ class MainFragment : BaseFragment() {
         // listen for sort by changed
         binding.chipGroupSort.setOnCheckedChangeListener { _, checkedId ->
             Timber.e("checked id -> $checkedId")
-            when (checkedId) {
-                R.id.chip_stars -> {
-                    sortState = SortState.STARS
-                    applySortComparator(RepoStarsComparator())
-                }
-                R.id.chip_forks -> {
-                    sortState = SortState.FORKS
-                    applySortComparator(RepoForksComparator())
-                }
-                R.id.chip_updated -> {
-                    sortState = SortState.UPDATED
-                    applySortComparator(RepoUpdatedComparator())
-                }
-                else -> {
-                    sortState = SortState.NONE
-                    Timber.e("nothing selected")
-                }
+            sortState = when (checkedId) {
+                R.id.chip_stars -> SortState.STARS
+                R.id.chip_forks -> SortState.FORKS
+                R.id.chip_updated -> SortState.UPDATED
+                else -> SortState.NONE
             }
+            sortRepositoryList()
         }
     }
 
 
     /**
-     * Apply relevant sort comparator and reload the list
+     * Sort list based on the [SortState]
+     * @see SortRepositories use case for implementation
      */
-    private fun applySortComparator(comparator: Comparator<Repo>) {
-        val sortedList: List<Repo> = mRepoList.toList()
-        Collections.sort(sortedList, comparator)
+    private fun sortRepositoryList() {
+        val sortedList = viewModel.sortList(sortState, mRepoList)
         repoAdapter.submitList(sortedList)
     }
 
@@ -188,7 +178,7 @@ class MainFragment : BaseFragment() {
             return
         }
 
-        repo.owner?.htmlUrl?.let {
+        repo.owner?.html_url?.let {
             val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(it))
             startActivity(browserIntent)
         }
@@ -255,25 +245,14 @@ class MainFragment : BaseFragment() {
                             toggleProgress(false)
 
                             val list = it.data.items
-                            mRepoList.clear()
-                            mRepoList.addAll(list)
+                            mRepoList = list.toMutableList()
 
                             toggleNoResultsState(list.isEmpty())
-                            applySortFilterIfNecessary(list)
+                            sortRepositoryList()
                         }
                     }
                 }
             }
-        }
-    }
-
-
-    private fun applySortFilterIfNecessary(list: List<Repo>) {
-        when (sortState) {
-            SortState.STARS -> applySortComparator(RepoStarsComparator())
-            SortState.FORKS -> applySortComparator(RepoForksComparator())
-            SortState.UPDATED -> applySortComparator(RepoUpdatedComparator())
-            SortState.NONE -> repoAdapter.submitList(list)
         }
     }
 

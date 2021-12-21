@@ -22,7 +22,7 @@
         tools:layout="@layout/fragment_repo_details">
         <argument
             android:name="repo"
-            app:argType="com.samdev.githubsearch.data.models.Repo"
+            app:argType="com.samdev.githubsearch.core.domain.Repo"
             app:nullable="true" />
     </fragment>
 </navigation>

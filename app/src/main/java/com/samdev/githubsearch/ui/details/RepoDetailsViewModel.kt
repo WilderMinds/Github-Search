@@ -3,9 +3,9 @@ package com.samdev.githubsearch.ui.details
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.samdev.githubsearch.R
-import com.samdev.githubsearch.data.models.Owner
-import com.samdev.githubsearch.data.repository.IRepository
-import com.samdev.githubsearch.utils.Resource
+import com.samdev.githubsearch.core.domain.Owner
+import com.samdev.githubsearch.core.utils.Resource
+import com.samdev.githubsearch.framework.UseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RepoDetailsViewModel @Inject constructor(
-    private val repository: IRepository
+    private val useCases: UseCases
 ) : ViewModel() {
 
 
@@ -45,9 +45,10 @@ class RepoDetailsViewModel @Inject constructor(
         fetchLanguages(userName, repo)
     }
 
+
     private suspend fun fetchUser(userName: String) {
         _userResponse.value = Resource.Loading
-        val response = repository.fetchUser(userName)
+        val response = useCases.getUser(userName)
         _userResponse.value = response
         println("fetched user")
     }
@@ -55,7 +56,7 @@ class RepoDetailsViewModel @Inject constructor(
 
     private suspend fun fetchContributors(userName: String, repo: String) {
         _contributors.value = Resource.Loading
-        val response = repository.fetchContributors(userName, repo)
+        val response = useCases.getRepositoryContributors(userName, repo)
         _contributors.value = response
         println("fetched contributors")
     }
@@ -63,7 +64,7 @@ class RepoDetailsViewModel @Inject constructor(
 
     private suspend fun fetchLanguages(userName: String, repo: String) {
         _languages.value = Resource.Loading
-        val response = repository.fetchLanguages(userName, repo)
+        val response = useCases.getAllRepositoryLanguages(userName, repo)
         _languages.value = response
         println("fetched languages")
     }

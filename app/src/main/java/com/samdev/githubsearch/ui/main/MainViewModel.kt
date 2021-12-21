@@ -2,10 +2,11 @@ package com.samdev.githubsearch.ui.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.samdev.githubsearch.data.models.Repo
-import com.samdev.githubsearch.data.models.RepoSearchResponse
-import com.samdev.githubsearch.data.repository.IRepository
-import com.samdev.githubsearch.utils.Resource
+import com.samdev.githubsearch.core.domain.Repo
+import com.samdev.githubsearch.core.domain.RepoSearchResponse
+import com.samdev.githubsearch.core.domain.SortState
+import com.samdev.githubsearch.core.utils.Resource
+import com.samdev.githubsearch.framework.UseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val repository: IRepository
+    private val useCases: UseCases
 ) : ViewModel() {
 
     private val cacheMap = mutableMapOf<String, RepoSearchResponse>()
@@ -36,7 +37,7 @@ class MainViewModel @Inject constructor(
         }
 
         // request from API
-        val response = repository.searchRepositories(query)
+        val response = useCases.searchRepositories(query)
 
         // cache result
         if (response is Resource.Success) {
@@ -60,6 +61,11 @@ class MainViewModel @Inject constructor(
             return cacheMap[mQuery]?.items.orEmpty()
         }
         return emptyList()
+    }
+
+
+    fun sortList(sortState: SortState, sourceList: List<Repo>): List<Repo> {
+        return useCases.sortRepositories(sortState, sourceList)
     }
 
 }
